@@ -6,51 +6,98 @@
 #include <pinocchio/algorithm/kinematics-derivatives.hpp>
 
 
-class JacobianCallback : public casadi::Callback {
+class eePoseCallback : public casadi::Callback {
 public:
-    JacobianCallback(const std::string& name, pinocchio::Model& model) : model_(model) {
+    eePoseCallback(const std::string& name, pinocchio::Model& model) : model_(model) {
         construct(name);
-        data_ = pinocchio::Data(model_);
     }
-    ~JacobianCallback() override = default;
+    ~eePoseCallback() override = default;
 
     std::string get_name_in(casadi_int i) override { return "q"; }
-    std::string get_name_out(casadi_int i) override { return "J"; }
+    std::string get_name_out(casadi_int i) override { return "position"; }
     casadi_int get_n_in() override { return 1; }
     casadi_int get_n_out() override { return 1; }
     casadi::Sparsity get_sparsity_in(casadi_int i) override { return casadi::Sparsity::dense(model_.nq); }
-    casadi::Sparsity get_sparsity_out(casadi_int i) override { return casadi::Sparsity::dense(6, model_.nq); }
+    casadi::Sparsity get_sparsity_out(casadi_int i) override { return casadi::Sparsity::dense(3, 1); }
 
-    bool has_jacobian() const override { return false; }
-    bool has_forward(casadi_int nfwd) const override { return false; }
-    bool has_reverse(casadi_int nadj) const override { return false; }
+    bool has_jacobian() const override { return true; }
+    bool has_forward(casadi_int nfwd) const override { return true; }
+    bool has_reverse(casadi_int nadj) const override { return true; }
+
 
     std::vector<casadi::DM> eval(const std::vector<casadi::DM>& arg) const override {
         Eigen::VectorXd q = Eigen::Map<const Eigen::VectorXd>(arg[0].ptr(), arg[0].size1());
+        pinocchio::Data data(model_);
         pinocchio::forwardKinematics(model_, data, q);
         pinocchio::updateFramePlacements(model_, data);
 
         Eigen::Vector3d ee_pose = data.oMf[model_.nframes - 1].translation();
 
-        computeJointJacobians(model_, data, q);
-        Eigen::MatrixXd J = data.J;
-        casadi::DM J_dm = casadi::DM::zeros(J.rows(), J.cols());
-        std::copy(J.data(), J.data() + J.size(), J_dm.ptr());
-        return { J_dm };
+        casadi::DM ee_dm = casadi::DM::zeros(3, 1);
+        std::copy(ee_pose.data(), ee_pose.data() + ee_pose.size(), ee_dm.ptr());
+        return { ee_dm };
     }
 
+    casadi::Function get_jacobian(const std::string& name,
+        const std::vector<std::string>& inames,
+        const std::vector<std::string>& onames,
+        const casadi::Dict& opts) const override
+    {
+        casadi::SX q = casadi::SX::sym("q", inames.size());
+        casadi::SX J = casadi::SX::zeros(3, model_.nq);
+        return casadi::Function(name, { q }, { J }, inames, onames, opts);
+    }
 
+    casadi::Function get_forward(casadi_int nfwd, const std::string& name,
+        const std::vector<std::string>& inames,
+        const std::vector<std::string>& onames,
+        const casadi::Dict& opts) const override
+    {
+        std::vector<casadi::SX> inputs;
+        casadi::SX q = casadi::SX::sym("q", model_.nq);
+        inputs.push_back(q);
+        inputs.push_back(casadi::SX::sym("position", 3, 1));
+        for (casadi_int i = 0; i < nfwd; ++i) {
+            inputs.push_back(casadi::SX::sym("fwd_seed_" + std::to_string(i), q.size()));
+        }
+
+        std::vector<casadi::SX> outputs;
+        for (casadi_int i = 0; i < nfwd; ++i) {
+            outputs.push_back(casadi::SX::zeros(3, 1));
+        }
+
+        return casadi::Function(name, inputs, outputs, inames, onames, opts);
+    }
+
+    casadi::Function get_reverse(casadi_int nadj, const std::string& name,
+        const std::vector<std::string>& inames,
+        const std::vector<std::string>& onames,
+        const casadi::Dict& opts) const override
+    {
+        std::vector<casadi::SX> inputs;
+        casadi::SX q = casadi::SX::sym("q", 7);
+        inputs.push_back(q);
+        inputs.push_back(casadi::SX::sym("position", 3));
+        for (casadi_int i = 0; i < nadj; ++i) {
+            inputs.push_back(casadi::SX::sym("adj_seed_" + std::to_string(i), 3));
+        }
+
+        std::vector<casadi::SX> outputs;
+        for (casadi_int i = 0; i < nadj; ++i) {
+            outputs.push_back(casadi::SX::zeros(7));
+        }
+        return casadi::Function(name, inputs, outputs, inames, onames, opts);
+    }
 
 public:
     pinocchio::Model model_;
-    pinocchio::Data data_;
     int nv_ = 6;
 };
 
 
-class MinimumVel {
+class MinimumJerk {
 public:
-    MinimumVel(pinocchio::Model& model, int N, double max_vel, double max_acc) : model_(model) {
+    MinimumJerk(pinocchio::Model& model, int N, double max_vel, double max_acc) : model_(model) {
         casadi::SX T = casadi::SX::sym("T", 1);
         casadi::SX q0 = casadi::SX::sym("q0", model.nq);
         casadi::SX v0 = casadi::SX::sym("v0", model.nq);
@@ -69,8 +116,11 @@ public:
         casadi::SX loss = 0;
 
         casadi::SX q = casadi::SX::sym("q", model.nq);
-        jac_callback_ = std::make_shared<JacobianCallback>("jacobian_cb", model_);
-        get_jacobian_ = casadi::Function("getJacobian", { q }, { (*jac_callback_)({q})[0] });
+        ee_callback_ = std::make_shared<eePoseCallback>("ee_cb", model_);
+        get_ee_pose_ = casadi::Function("get_ee_pose_", { q }, { (*ee_callback_)({q})[0] });
+        casadi::SX ee_pos = get_ee_pose_(q)[0];
+        casadi::SX J = casadi::SX::jacobian(ee_pos, q);
+        get_jacobian_ = casadi::Function("getJacobian", { q }, { J });
 
         g.push_back(T);
         lbg_.push_back(0.0);
@@ -106,7 +156,7 @@ public:
             loss += (w_qj_ * casadi::SX::mtimes(j.T(), j));
             casadi::SX J = get_jacobian_(casadi::DM(q))[0];
             casadi::SX pv = casadi::SX::mtimes(J, v);
-            loss += w_pv_ * casadi::SX::mtimes(pv.T(), pv);
+            // loss += w_pv_ * casadi::SX::mtimes(pv.T(), pv);
         }
         loss += w_T_ * T;
 
@@ -125,7 +175,7 @@ public:
 
         solver_ = casadi::nlpsol("solver", "ipopt", nlp, opts);
     };
-    MinimumVel() { ; };
+    MinimumJerk() { ; };
 
     void Solve(const Eigen::Matrix<double, 3, Eigen::Dynamic>& start_state,
         const Eigen::Matrix<double, 3, Eigen::Dynamic>& end_state,
@@ -176,7 +226,8 @@ public:
 
 private:
     pinocchio::Model model_;
-    std::shared_ptr<JacobianCallback> jac_callback_;
+    std::shared_ptr<eePoseCallback> ee_callback_;
+    casadi::Function get_ee_pose_;
     casadi::Function get_jacobian_;
 
     double w_qj_ = 0.5;
