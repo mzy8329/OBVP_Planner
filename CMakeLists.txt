@@ -18,7 +18,6 @@ find_package(ompl REQUIRED)
 find_package(pinocchio REQUIRED)
 find_package(casadi REQUIRED)
 
-
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     rospy
