@@ -23,3 +23,4 @@ pip install ./include/obvp_planner --verbose
 ```
 即可将obvp_planner安装到python中
 
+具体使用可见scripts/MoveTo.py

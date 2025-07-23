@@ -22,13 +22,8 @@ J = simplify(J)
 J = collect(J, T)
 pprint(J)
 
-end_constrain_dim = 1
-# end (x, v, a) constrain
-M = Matrix([
-    [1/120*T**5, 1/24*T**4, 1/6*T**3],
-    [1/24*T**4, 1/6*T**3,  1/2*T**2],
-    [1/6*T**3,  1/2*T**2,  1*T]
-])
+end_constrain_dim = 2
+
 # end (x) constrain
 if end_constrain_dim == 1:
     M = Matrix([
@@ -36,16 +31,23 @@ if end_constrain_dim == 1:
         [1/6*T**4-2*T, 1/2*T**3-1, T**2],
         [1/2*T**3+T**2,  T**2 + 2*T,  1*T + 2]
     ])
+# end (x, v) constrain
+elif end_constrain_dim == 2:
+    M = Matrix([
+        [1/120*T**5, 1/24*T**4, 1/6*T**3],
+        [1/24*T**4, 1/6*T**3,  1/2*T**2],
+        [1/2*T**3+T**2,  T**2 + 2*T,  1*T + 2]
+    ])
+# end (x, v, a) constrain
+else:
+    M = Matrix([
+        [1/120*T**5, 1/24*T**4, 1/6*T**3],
+        [1/24*T**4, 1/6*T**3,  1/2*T**2],
+        [1/6*T**3,  1/2*T**2,  1*T]
+    ])
 M_inv = M.inv().applyfunc(nsimplify)
 
-dq = qe - a0/2*T**2 - v0*T - q0
-dv = ve - a0*T - v0
-da = ae - a0
-dS = Matrix([dq, dv, da])
-Ralpha = simplify((M_inv[0, :] @ dS)[0])
-Rbeta = simplify((M_inv[1, :] @ dS)[0])
-Rgamma = simplify((M_inv[2, :] @ dS)[0])
-# end (x) constrain
+
 if end_constrain_dim == 1:
     dq = qe - a0/2*T**2 - v0*T - q0
     dv = -a0*T
@@ -54,6 +56,22 @@ if end_constrain_dim == 1:
     Rbeta = simplify((M_inv[1, 0] * dq))
     Rgamma = simplify((M_inv[2, 0] * dq))
 
+elif end_constrain_dim == 2:
+    dq = qe - a0/2*T**2 - v0*T - q0
+    dv = ve - a0*T - v0
+    da = 0
+    dS = Matrix([dq, dv])
+    Ralpha = simplify((M_inv[0, 0:2] * dS)[0])
+    Rbeta = simplify((M_inv[1, 0:2] * dS)[0])
+    Rgamma = simplify((M_inv[2, 0:2] * dS)[0])
+else:
+    dq = qe - a0/2*T**2 - v0*T - q0
+    dv = ve - a0*T - v0
+    da = ae - a0
+    dS = Matrix([dq, dv, da])
+    Ralpha = simplify((M_inv[0, :] @ dS)[0])
+    Rbeta = simplify((M_inv[1, :] @ dS)[0])
+    Rgamma = simplify((M_inv[2, :] @ dS)[0])
 
 print("alpha: ")
 pprint(Ralpha)
@@ -78,6 +96,9 @@ pprint(gradJ)
 if end_constrain_dim == 1:
     gradJ = gradJ* 3*T**7*(T**9 + 126*T**6 + 5292*T**3 + 74088)
     dim = 16
+elif end_constrain_dim == 2:
+    dim = 7
+    gradJ = gradJ * T**7
 else:
     dim = 7
     gradJ = gradJ * T**7

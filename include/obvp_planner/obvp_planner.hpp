@@ -40,6 +40,24 @@ public:
         return UpdateOutput(_dt);
     }
 
+    Eigen::VectorXd getCurrentOutput_EPV(const Eigen::MatrixXd& _target_state, double _dt) {
+        if (target_state_.rows() != _target_state.rows() || target_state_ != _target_state) {
+            target_state_.resize(_target_state.rows(), _target_state.cols());
+            target_state_ = _target_state;
+
+            if (_target_state.rows() == 2) {
+                ObvpSolver::Plan_S3_EPV(current_state_, target_state_, weight_T_, T_, Pos_C_Matrix_);
+                UpdateMatrix();
+            }
+            else {
+                std::cout << "Error: target_state.rows() must be 2" << std::endl;
+                return Eigen::VectorXd::Zero(dof_);
+            }
+            t_ = 0;
+        }
+        return UpdateOutput(_dt);
+    }
+
     Eigen::VectorXd getCurrentOutput_EPVA(const Eigen::MatrixXd& _target_state, double _dt) {
         if (target_state_.rows() != _target_state.rows() || target_state_ != _target_state) {
             target_state_.resize(_target_state.rows(), _target_state.cols());

@@ -36,6 +36,16 @@ PYBIND11_MODULE(obvp_planner, m) {
             "Returns:\n"
             "    Current position vector (DOF-length)")
 
+        .def("getCurrentOutput_EPV", &ObvpPlanner::getCurrentOutput_EPV,
+            py::arg("target_state"),
+            py::arg("dt"),
+            "Compute next output state\n"
+            "Args:\n"
+            "    target_state: Target state matrix (2xDOF)\n"
+            "    dt: Time step\n"
+            "Returns:\n"
+            "    Current position vector (DOF-length)")
+
         .def("getCurrentOutput_EPVA", &ObvpPlanner::getCurrentOutput_EPVA,
             py::arg("target_state"),
             py::arg("dt"),

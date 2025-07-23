@@ -39,7 +39,7 @@ if __name__ == "__main__":
     initial_state = np.zeros((3, dof), dtype=np.float64)
     max_vel = np.array([3.0] * dof, dtype=np.float64)
     max_acc = np.array([5.0] * dof, dtype=np.float64)
-    weight_T = 0.1
+    weight_T = 1
 
     planner = ObvpPlanner(initial_state, dof, max_vel, max_acc, weight_T)
 
@@ -54,7 +54,9 @@ if __name__ == "__main__":
     rate = rospy.Rate(1/dt)
     temp_tar_state = np.random.uniform(low=-np.pi, high=np.pi, size=(1, dof))
 
-    tar_state = np.zeros((3, dof))
+
+    type = 2
+    tar_state = np.zeros((type, dof))
     tar_state[0, :] = temp_tar_state
     i = 0
     pts = 0
@@ -68,8 +70,14 @@ if __name__ == "__main__":
                 break                
             else:
                 tar_state[0, :] = np.random.uniform(low=-0.5*np.pi, high=0.5*np.pi, size=(1, dof))
-        
-        output_q = planner.getCurrentOutput_EPVA(tar_state, dt)
+
+        if type == 1:
+            output_q = planner.getCurrentOutput_EP(tar_state, dt)
+        elif type == 2:
+            output_q = planner.getCurrentOutput_EPV(tar_state, dt)
+        else:
+            output_q = planner.getCurrentOutput_EPVA(tar_state, dt)
+
         current_state = planner.getCurrentState()
         t_list.append(t)
         p_list.append(np.array(current_state[0, :]))
