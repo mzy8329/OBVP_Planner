@@ -1,0 +1,364 @@
+<?xml version='1.0'?>
+<robot name='merged_model'>
+  <link name='LINK_BASE'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_BASE.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_BASE.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='child_root_joint' type='fixed'>
+    <parent link='LINK_BASE'/>
+    <child link='child_LINK_BASE'/>
+    <axis xyz='0 0 1'/>
+  </joint>
+  <link name='child_LINK_BASE'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_BASE.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_BASE.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='child_J_1' type='revolute'>
+    <parent link='child_LINK_BASE'/>
+    <child link='child_LINK_1'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='child_LINK_1'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_1.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_1.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='child_J_2' type='revolute'>
+    <parent link='child_LINK_1'/>
+    <child link='child_LINK_2'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='child_LINK_2'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_2.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_2.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='child_J_3' type='revolute'>
+    <parent link='child_LINK_2'/>
+    <child link='child_LINK_3'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='child_LINK_3'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_3.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_3.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='child_J_4' type='revolute'>
+    <parent link='child_LINK_3'/>
+    <child link='child_LINK_4'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='child_LINK_4'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_4.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_4.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='child_J_5' type='revolute'>
+    <parent link='child_LINK_4'/>
+    <child link='child_LINK_5'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='child_LINK_5'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_5.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_5.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='child_J_6' type='revolute'>
+    <parent link='child_LINK_5'/>
+    <child link='child_LINK_6'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='child_LINK_6'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_6.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_6.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='child_J_7' type='revolute'>
+    <parent link='child_LINK_6'/>
+    <child link='child_LINK_7'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='child_LINK_7'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_7.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_7.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='J_1' type='revolute'>
+    <parent link='LINK_BASE'/>
+    <child link='LINK_1'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='LINK_1'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_1.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_1.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='J_2' type='revolute'>
+    <parent link='LINK_1'/>
+    <child link='LINK_2'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='LINK_2'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_2.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_2.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='J_3' type='revolute'>
+    <parent link='LINK_2'/>
+    <child link='LINK_3'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='LINK_3'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_3.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_3.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='J_4' type='revolute'>
+    <parent link='LINK_3'/>
+    <child link='LINK_4'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='LINK_4'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_4.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_4.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='J_5' type='revolute'>
+    <parent link='LINK_4'/>
+    <child link='LINK_5'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='LINK_5'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_5.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_5.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='J_6' type='revolute'>
+    <parent link='LINK_5'/>
+    <child link='LINK_6'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='LINK_6'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_6.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_6.STL'/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name='J_7' type='revolute'>
+    <parent link='LINK_6'/>
+    <child link='LINK_7'/>
+    <axis xyz='0 0 1'/>
+    <limit effort='100' velocity='10'/>
+  </joint>
+  <link name='LINK_7'>
+    <visual>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_7.STL'/>
+      </geometry>
+      <material name=>
+      <color rgba='0.898039215686275 0.917647058823529 0.929411764705882 1'/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz='0 0 0' rpy='0 0 0'/>
+      <geometry>
+        <mesh filename='/home/tengxun/lab/pinocchio_ws/src/collision_detection/description/jaka/meshes/LINK_7.STL'/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

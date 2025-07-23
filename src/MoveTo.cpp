@@ -5,11 +5,8 @@
 #include <chrono>
 #include <Eigen/Dense>
 
-#include "obvp_planner/obvp_solver/obvp_solver.hpp"
+#include "obvp_planner/obvp_planner.hpp"
 #include "minimum_jerk.hpp"
-
-#include "gcopter/gcopter_arm.hpp"
-#include "gcopter/trajectory.hpp"
 
 
 ros::Publisher q_pub;
@@ -64,6 +61,35 @@ int main(int argc, char** argv)
     double T;
     Eigen::Matrix<double, 6, Eigen::Dynamic> C_matrix;
 
+
+    Eigen::VectorXd max_vel(7), max_acc(7);
+    max_vel << 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0;
+    max_acc << 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0;
+
+    ObvpPlanner planner(iniState, 7, max_vel, max_acc, 0.1);
+
+    Eigen::RowVectorXd tar_state = Eigen::RowVectorXd::Random(7);
+    std_msgs::Float32MultiArray q_msg;
+    double dt = 0.05;
+    int i = 0;
+    ros::Rate loop_rate(1 / dt);
+    while (ros::ok()) {
+        if (i > 500) {
+            break;
+        }
+
+        if (i++ % 100 == 0) {
+            tar_state = Eigen::RowVectorXd::Random(7);
+        }
+        Eigen::VectorXd q = planner.getCurrentOutput(tar_state, dt);
+        eigen2msg(q, q_msg);
+        q_pub.publish(q_msg);
+
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
+
+
     // std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
     // // ObvpSolver::Plan_S3(iniState, finState, T, C_matrix);
     // ObvpSolver::Plan_S3MT(iniState, finState, 0.1, T, C_matrix);
@@ -71,14 +97,6 @@ int main(int argc, char** argv)
     // std::cout << "obvp T: " << T << std::endl;
     // std::cout << "M: " << C_matrix << std::endl;
     // pubCmd(iniState, T, C_matrix);
-
-    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-    // ObvpSolver::Plan_S3(iniState, finState, T, C_matrix);
-    ObvpSolver::Plan_S3_EP(iniState, finState.row(0), 0.001, T, C_matrix);
-    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-    std::cout << "obvp T: " << T << std::endl;
-    pubCmd(iniState, T, C_matrix);
-
 
     // pinocchio::Model model;
     // pinocchio::urdf::buildModel("/home/tengxun/lab/pinocchio_ws/src/mujoco_sim/description/jaka/right_jaka.urdf", model);
@@ -90,6 +108,5 @@ int main(int argc, char** argv)
     // std::cout << "vel constant T: " << T << std::endl;
     // std::cout << "calc time used: (obvp) " << (t2 - t1).count() * 1e-6 << "ms,  (min jerk) " << (t4 - t3).count() * 1e-6 << "ms" << std::endl;
     // pubCmd(finState, T, C_matrix);
-
     return 0;
 }
