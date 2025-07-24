@@ -17,12 +17,12 @@ at = diff(vt, t)
 jt = diff(at, t)
 temp = jt**2
 
-J = 1/T * integrate(temp, (t, 0, T)) + T * omega
+J = integrate(temp, (t, 0, T)) + T * omega
 J = simplify(J)
 J = collect(J, T)
 pprint(J)
 
-end_constrain_dim = 2
+end_constrain_dim = 1
 
 # end (x) constrain
 if end_constrain_dim == 1:
@@ -94,14 +94,14 @@ gradJ = collect(gradJ, T)
 print("gradJ: ")
 pprint(gradJ)
 if end_constrain_dim == 1:
-    gradJ = gradJ* 3*T**7*(T**9 + 126*T**6 + 5292*T**3 + 74088)
-    dim = 16
+    gradJ = gradJ* 3*T**6*(T**9 + 126*T**6 + 5292*T**3 + 74088)
+    dim = 15
 elif end_constrain_dim == 2:
-    dim = 7
-    gradJ = gradJ * T**7
+    dim = 6
+    gradJ = gradJ * T**6
 else:
-    dim = 7
-    gradJ = gradJ * T**7
+    dim = 6
+    gradJ = gradJ * T**6
 
 gradJ = simplify(gradJ)
 gradJ = collect(gradJ, T)
@@ -118,7 +118,7 @@ print("c")
 pprint(poly_coeffs[0])
 pprint("--------------")
 for i in range(dim):
-    if(i < dim-2):
+    if(i < dim-1):
         eigen_Matrix[0, i] = simplify(-poly_coeffs[i+1]/poly_coeffs[0])
         print(i, (eigen_Matrix[0, i]))
     if(i > 1):

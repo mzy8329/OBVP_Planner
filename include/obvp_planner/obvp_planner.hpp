@@ -19,7 +19,7 @@ public:
     }
 
     double getT() {
-        return T_;
+        return T_ / t_resolution_;
     }
 
     Eigen::VectorXd getCurrentOutput_EP(const Eigen::MatrixXd& _target_state, double _dt) {
