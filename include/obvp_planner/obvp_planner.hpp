@@ -104,7 +104,12 @@ private:
 
         double max_radio = std::max((max_vel.array() / max_vel_.array()).maxCoeff(),
             (max_acc.array() / max_acc_.array()).maxCoeff());
-        t_resolution_ = 1.0 / std::pow(max_radio, 0.25);
+        if (max_radio > 1) {
+            t_resolution_ = 1.0 / std::pow(max_radio, 0.24);
+        }
+        else {
+            t_resolution_ = 1.0 / std::pow(max_radio, 0.25);
+        }
     }
 
     inline Eigen::VectorXd UpdateOutput(double _dt) {

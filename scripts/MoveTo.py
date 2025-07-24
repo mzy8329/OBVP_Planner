@@ -59,7 +59,7 @@ if __name__ == "__main__":
     temp_tar_state = np.random.uniform(low=-np.pi, high=np.pi, size=(1, dof))
 
     np.random.seed(8329)
-    type = 3
+    type = 1
     tar_state = np.zeros((type, dof))
     tar_state[0, :] = temp_tar_state
     i = 0

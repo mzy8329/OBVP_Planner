@@ -13,7 +13,7 @@ sudo ln -s /usr/include/eigen3/Eigen /usr/local/include/Eigen
 添加软链接
 
 ## obvp使用指南
-### C语言
+### C++
 可见src/MoveTo.cpp
 
 ### Python
