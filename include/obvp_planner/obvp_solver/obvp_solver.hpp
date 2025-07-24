@@ -69,8 +69,8 @@ namespace ObvpSolver {
         eigen_matrix(0, 4) = 80.0 * (-57.0 * a0.transpose() * a0 + 16.0 * q0.transpose() * v0 - 16.0 * qe.transpose() * v0)[0] / w_t;
         eigen_matrix(0, 5) = 4.0 * (-1920.0 * a0.transpose() * v0 - 3969.0 * w_t + 200.0 * q0.transpose() * q0 - 400.0 * q0.transpose() * qe + 200.0 * qe.transpose() * qe) / w_t;
         eigen_matrix(0, 6) = 960.0 * (a0.transpose() * q0 - a0.transpose() * qe + v0.transpose() * v0)[0] / w_t;
-        eigen_matrix(0, 7) = 1120.0 * (33.0 * a0.transpose() * a0 + 8.0 * q0.transpose() * v0 - 8.0 * qe.transpose() * v0) / w_t;
-        eigen_matrix(0, 8) = 8.0 * (29760.0 * a0.transpose() * v0 - 9261.0 * w_t + 1000.0 * q0.transpose() * q0 - 2000.0 * q0.transpose() * qe + 1000.0 * qe.transpose() * qe)[0] / w_t;
+        eigen_matrix(0, 7) = 1120.0 * (33.0 * a0.transpose() * a0 + 8.0 * q0.transpose() * v0 - 8.0 * qe.transpose() * v0)[0] / w_t;
+        eigen_matrix(0, 8) = 8.0 * (29760.0 * a0.transpose() * v0 - 9261.0 * w_t + 1000.0 * q0.transpose() * q0 - 2000.0 * q0.transpose() * qe + 1000.0 * qe.transpose() * qe) / w_t;
         eigen_matrix(0, 9) = 328320.0 * (a0.transpose() * q0 - a0.transpose() * qe + v0.transpose() * v0)[0] / w_t;
         eigen_matrix(0, 10) = 960.0 * (399.0 * a0.transpose() * a0 + 872.0 * q0.transpose() * v0 - 872.0 * qe.transpose() * v0)[0] / w_t;
         eigen_matrix(0, 11) = 1920.0 * (1596.0 * a0.transpose() * v0 + 265.0 * q0.transpose() * q0 - 530.0 * q0.transpose() * qe + 265.0 * qe.trace() * qe)[0] / w_t;
@@ -93,7 +93,7 @@ namespace ObvpSolver {
         eigen_matrix(14, 13) = 1.0;
         eigen_matrix(15, 14) = 1.0;
 
-        Eigen::EigenSolver<Eigen::Matrix<double, 16, 16>> solver(eigen_matrix);
+        Eigen::EigenSolver<Eigen::Matrix<double, 15, 15>> solver(eigen_matrix);
         Eigen::VectorXd eigen_values = solver.eigenvalues().real();
         T = eigen_values.maxCoeff();
 

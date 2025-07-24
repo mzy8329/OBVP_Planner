@@ -81,7 +81,7 @@ int main(int argc, char** argv)
         if (i++ % 100 == 0) {
             tar_state = Eigen::RowVectorXd::Random(7);
         }
-        Eigen::VectorXd q = planner.getCurrentOutput(tar_state, dt);
+        Eigen::VectorXd q = planner.getCurrentOutput_EPVA(tar_state, dt);
         eigen2msg(q, q_msg);
         q_pub.publish(q_msg);
 

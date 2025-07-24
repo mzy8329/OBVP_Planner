@@ -19,6 +19,7 @@ sudo ln -s /usr/include/eigen3/Eigen /usr/local/include/Eigen
 ### Python
 运行
 ```shell
+rm -r ./include/obvp_planner/build && rm -r ./include/obvp_planner/obvp_planner.egg-info &&
 pip install ./include/obvp_planner --verbose
 ```
 即可将obvp_planner安装到python中

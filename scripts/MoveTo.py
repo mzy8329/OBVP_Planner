@@ -40,9 +40,9 @@ if __name__ == "__main__":
 
     dof = 7
     initial_state = np.zeros((3, dof), dtype=np.float64)
-    max_vel = np.array([3.0] * dof, dtype=np.float64)
-    max_acc = np.array([5.0] * dof, dtype=np.float64)
-    weight_T = 1.0
+    max_vel = np.array([10.0] * dof, dtype=np.float64)
+    max_acc = np.array([10.0] * dof, dtype=np.float64)
+    weight_T = 10.0
 
     planner = ObvpPlanner(initial_state, dof, max_vel, max_acc, weight_T)
 
@@ -53,23 +53,26 @@ if __name__ == "__main__":
     cmd_list = []
 
     t = 0
-    dt = 0.05
+    dt = 0.001
+    res = 0.5
     rate = rospy.Rate(1/dt)
     temp_tar_state = np.random.uniform(low=-np.pi, high=np.pi, size=(1, dof))
 
-
-    type = 1
+    np.random.seed(8329)
+    type = 3
     tar_state = np.zeros((type, dof))
     tar_state[0, :] = temp_tar_state
     i = 0
     pts = 0
     mean_t = 0
+    T = 0
     while rospy.is_shutdown() == False:
         if dt*i >= planner.getT():
+            T += planner.getT()
             i = 0
             pts += 1
 
-            temp_tar_state = np.random.uniform(low=-0.01*np.pi, high=0.01*np.pi, size=(1, dof))
+            temp_tar_state = np.random.uniform(low=-res*np.pi, high=res*np.pi, size=(1, dof))
             if pts > 3:
                 break                
             else:
@@ -93,11 +96,11 @@ if __name__ == "__main__":
         cmd_list.append(np.array(tar_state[0, :]))
         
         output_q = output_q.astype(np.float32)
-        # msg = Float32MultiArray(data=output_q)
-        # state_publisher.publish(msg)
+        msg = Float32MultiArray(data=output_q)
+        state_publisher.publish(msg)
         i += 1
         t += dt
-        # rate.sleep()
+        rate.sleep()
 
     print(mean_t/len(t_list))
     draw(np.array(t_list), np.array(p_list), np.array(v_list), np.array(a_list), np.array(cmd_list))
