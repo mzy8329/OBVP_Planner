@@ -35,7 +35,7 @@ def draw(t_list, q_list, v_list, a_list, cmd_list):
     plt.show()
 
 if __name__ == "__main__":
-    rospy.init_node("MoveTo")
+    rospy.init_node("OBVP_Planner")
     state_publisher = rospy.Publisher("/mujoco/right_arm/cmd", Float32MultiArray, queue_size=10)
 
     dof = 7

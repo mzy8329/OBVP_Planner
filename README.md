@@ -5,24 +5,17 @@ OBVP_planner is a parameterized (interpolation) trajectory planner developed for
 Currently, there are three planning methods:
 
  (1)*getCurrentOutput_EPVA* (needs to input the third-order target, i.e., target position, velocity, and acceleration):
-<img src="./doc/OBVP_EPVA.png" style="zoom: 18%;">
+<img src="./doc/OBVP_EPVA.png" style="zoom: 17%;">
 
  (2)*getCurrentOutput_EPV* (needs to input the second-order state of the target, i.e., target position and velocity):
-<img src="./doc/OBVP_EPV.png" style="zoom: 18%;">
+<img src="./doc/OBVP_EPV.png" style="zoom: 17%;">
  
  (3)*getCurrentOutput_EP* (needs to input the first-order state of the target, i.e., target position):
-<img src="./doc/OBVP_EP.png" style="zoom: 18%;">
+<img src="./doc/OBVP_EP.png" style="zoom: 17%;">
 
 
 
 ## Tutorial
-### Start mujoco
-Start roscore first, and then
-```shell
-pip install mujoco-py
-python3 ./scripts/start_mujoco.py
-```
-
 ### C++
 ```c++
 ObvpPlanner planner(iniState, 7, max_vel, max_acc, 0.1);
@@ -50,3 +43,10 @@ planner = ObvpPlanner(initial_state, dof, max_vel, max_acc, weight_T)
 output_q = planner.getCurrentOutput_EPVA(tar_state, dt)
 ```
 See scripts/obvp_planner_test.py for details.
+
+### Start mujoco
+Start roscore first, and then
+```shell
+pip install mujoco-py
+python3 ./scripts/start_mujoco.py
+```

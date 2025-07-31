@@ -26,9 +26,6 @@ Eigen::RowVectorXd t2vec(double t) {
 
 void pubCmd(Eigen::Matrix<double, 3, 7> iniState, double T, const Eigen::Matrix<double, 6, Eigen::Dynamic>& C_matrix) {
     std_msgs::Float32MultiArray q_msg;
-    // eigen2msg(iniState.row(0), q_msg);
-    // q_pub.publish(q_msg);
-    // sleep(1);
 
     double dt = 0.05;
     ros::Rate loop_rate(1 / dt);
@@ -44,8 +41,8 @@ void pubCmd(Eigen::Matrix<double, 3, 7> iniState, double T, const Eigen::Matrix<
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "moveTo");
-    ros::NodeHandle nh("/moveTo");
+    ros::init(argc, argv, "OBVP_Planner");
+    ros::NodeHandle nh("/OBVP_Planner");
 
     q_pub = nh.advertise<std_msgs::Float32MultiArray>("/mujoco/right_arm/cmd", 10);
 

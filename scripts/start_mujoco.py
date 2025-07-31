@@ -16,7 +16,7 @@ if __name__ == "__main__":
     state_publisher = rospy.Publisher("/mujoco/right_arm/pose", Float32MultiArray, queue_size=10)
     cmd_subscriber = rospy.Subscriber("/mujoco/right_arm/cmd", Float32MultiArray, rightArmCmdCallback)
 
-    right_jaka_xml = "/home/tengxun/lab/pinocchio_ws/src/MoveTo/description/jaka/right_jaka.xml"
+    right_jaka_xml = "/home/tengxun/lab/pinocchio_ws/src/OBVP_Planner/description/jaka/right_jaka.xml"
     model = mujoco.MjModel.from_xml_path(right_jaka_xml)
     data = mujoco.MjData(model)
 
