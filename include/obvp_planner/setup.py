@@ -24,8 +24,8 @@ ext = Extension(
 setup(
     name="obvp_planner",
     version="0.1.0",
-    author="zongyuma",
-    author_email="zongyuma@tencent.com",
+    author="mzy8329",
+    author_email="mzy8329@163.com",
     description="OBVP Planner with Python bindings",
     ext_modules=[ext],
     install_requires=["pybind11", "numpy"],
