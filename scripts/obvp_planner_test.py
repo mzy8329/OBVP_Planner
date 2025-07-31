@@ -64,7 +64,7 @@ if __name__ == "__main__":
     pts = 0
     mean_t = 0
     while rospy.is_shutdown() == False:
-        if dt*i >= planner.getT():
+        if dt*i >= planner.getT()*0.5:
             i = 0
             pts += 1
             resolution = planner.getResolution()

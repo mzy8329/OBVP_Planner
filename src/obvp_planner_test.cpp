@@ -93,7 +93,7 @@ int main(int argc, char** argv)
     // pubCmd(iniState, T, C_matrix);
 
     // pinocchio::Model model;
-    // pinocchio::urdf::buildModel("/home/tengxun/lab/pinocchio_ws/src/mujoco_sim/description/jaka/right_jaka.urdf", model);
+    // pinocchio::urdf::buildModel("/home/user/lab/pinocchio_ws/src/mujoco_sim/description/jaka/right_jaka.urdf", model);
     // MinimumJerk mini_vel_solver(model, 10, 1.0, 1.0);
     // std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
     // // mini_vel_solver.Solve(iniState, finState, T, C_matrix);

@@ -7,8 +7,8 @@
       },
       "includePath": [
         "/opt/ros/noetic/include/**",
-        "/home/tengxun/lab/pinocchio_ws/src/OBVP_Planner/include/**",
-        "/home/tengxun/lab/pinocchio_ws/src/collision_detection/include/**",
+        "/home/user/lab/pinocchio_ws/src/OBVP_Planner/include/**",
+        "/home/user/lab/pinocchio_ws/src/collision_detection/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",
