@@ -15,9 +15,11 @@ qt = alpha/120*t**5 + beta/24*t**4 + gamma/6*t**3 + a0/2*t**2 + v0*t + q0
 vt = diff(qt, t)
 at = diff(vt, t)
 jt = diff(at, t)
-temp = jt**2
+# temp = jt**2
+temp = jt**2 + omega
 
-J = integrate(temp, (t, 0, T)) + T * omega
+J = integrate(temp, (t, 0, T))
+# J = integrate(temp, (t, 0, T)) + T * omega
 J = simplify(J)
 J = collect(J, T)
 pprint(J)

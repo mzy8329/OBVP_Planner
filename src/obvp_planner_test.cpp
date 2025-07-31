@@ -6,8 +6,6 @@
 #include <Eigen/Dense>
 
 #include "obvp_planner/obvp_planner.hpp"
-#include "minimum_jerk.hpp"
-
 
 ros::Publisher q_pub;
 
@@ -88,7 +86,6 @@ int main(int argc, char** argv)
         ros::spinOnce();
         loop_rate.sleep();
     }
-
 
     // std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
     // // ObvpSolver::Plan_S3(iniState, finState, T, C_matrix);

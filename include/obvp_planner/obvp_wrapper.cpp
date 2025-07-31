@@ -65,5 +65,9 @@ PYBIND11_MODULE(obvp_planner, m) {
         .def("getT", &ObvpPlanner::getT,
             "Get T\n"
             "Returns:\n"
-            "    T");
+            "    T")
+        .def("getResolution", &ObvpPlanner::getResolution,
+            "Get Resolution\n"
+            "Returns:\n"
+            "    Resolution");
 }

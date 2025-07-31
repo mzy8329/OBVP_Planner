@@ -14,8 +14,6 @@ find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
 
 find_package(Eigen3 REQUIRED)
-find_package(ompl REQUIRED)
-find_package(pinocchio REQUIRED)
 find_package(casadi REQUIRED)
 
 find_package(catkin REQUIRED COMPONENTS
@@ -33,10 +31,8 @@ include_directories(
 )
 
 catkin_package()
-add_executable(MoveTo src/MoveTo.cpp)
-target_link_libraries(MoveTo
+add_executable(obvp_planner_test src/obvp_planner_test.cpp)
+target_link_libraries(obvp_planner_test
     ${catkin_LIBRARIES}
     casadi
-    pinocchio::pinocchio
 )
-

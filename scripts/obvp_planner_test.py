@@ -40,9 +40,9 @@ if __name__ == "__main__":
 
     dof = 7
     initial_state = np.zeros((3, dof), dtype=np.float64)
-    max_vel = np.array([10.0] * dof, dtype=np.float64)
-    max_acc = np.array([10.0] * dof, dtype=np.float64)
-    weight_T = 10.0
+    max_vel = np.array([1.0] * dof, dtype=np.float64)
+    max_acc = np.array([5.0] * dof, dtype=np.float64)
+    weight_T = 1.0
 
     planner = ObvpPlanner(initial_state, dof, max_vel, max_acc, weight_T)
 
@@ -54,29 +54,27 @@ if __name__ == "__main__":
 
     t = 0
     dt = 0.001
-    res = 0.5
+    res = 0.01
     rate = rospy.Rate(1/dt)
-    temp_tar_state = np.random.uniform(low=-np.pi, high=np.pi, size=(1, dof))
 
     np.random.seed(8329)
     type = 1
     tar_state = np.zeros((type, dof))
-    tar_state[0, :] = temp_tar_state
     i = 0
     pts = 0
     mean_t = 0
-    T = 0
     while rospy.is_shutdown() == False:
         if dt*i >= planner.getT():
-            T += planner.getT()
             i = 0
             pts += 1
-
+            resolution = planner.getResolution()
+            print("resolution: ", resolution)
+    
             temp_tar_state = np.random.uniform(low=-res*np.pi, high=res*np.pi, size=(1, dof))
             if pts > 3:
                 break                
             else:
-                tar_state[0, :] = temp_tar_state
+                tar_state[0, :] += temp_tar_state.reshape(-1)
 
         t1 = time.time()
         if type == 1:
@@ -84,23 +82,27 @@ if __name__ == "__main__":
         elif type == 2:
             output_q = planner.getCurrentOutput_EPV(tar_state, dt)
         else:
-            output_q = planner.getCurrentOutput_EPVA(tar_state, dt)
+            output_q = planner.getCurrentOutput_EPVA(tar_state, dt)        
         t2 = time.time()
         mean_t += (t2-t1)*1e4
+
+        resolution = planner.getResolution()
 
         current_state = planner.getCurrentState()
         t_list.append(t)
         p_list.append(np.array(current_state[0, :]))
-        v_list.append(np.array(current_state[1, :]))
-        a_list.append(np.array(current_state[2, :]))
+        v_list.append(np.array(current_state[1, :]*resolution))
+        a_list.append(np.array(current_state[2, :]*resolution))
         cmd_list.append(np.array(tar_state[0, :]))
         
         output_q = output_q.astype(np.float32)
         msg = Float32MultiArray(data=output_q)
-        state_publisher.publish(msg)
         i += 1
         t += dt
-        rate.sleep()
 
-    print(mean_t/len(t_list))
+        # state_publisher.publish(msg)
+        # rate.sleep()
+
+    # print(mean_t/len(t_list))
+    print(t)
     draw(np.array(t_list), np.array(p_list), np.array(v_list), np.array(a_list), np.array(cmd_list))

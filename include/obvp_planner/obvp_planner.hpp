@@ -18,6 +18,10 @@ public:
         return current_state_;
     }
 
+    double getResolution() {
+        return t_resolution_;
+    }
+
     double getT() {
         return T_ / t_resolution_;
     }
@@ -78,7 +82,7 @@ public:
 
 
 private:
-    Eigen::RowVectorXd t2vec(double _t) {
+    inline Eigen::RowVectorXd t2vec(double _t) {
         Eigen::RowVectorXd vec(6);
         for (int i = 0; i < 6; i++) {
             vec(i) = std::pow(_t, i);
@@ -86,7 +90,7 @@ private:
         return vec;
     }
 
-    void UpdateMatrix() {
+    inline void UpdateMatrix() {
         Vel_C_Matrix_.row(0) = Pos_C_Matrix_.row(1);
         for (int i = 2; i < 6; i++) {
             Vel_C_Matrix_.row(i - 1) = Pos_C_Matrix_.row(i) * i;
@@ -104,12 +108,7 @@ private:
 
         double max_radio = std::max((max_vel.array() / max_vel_.array()).maxCoeff(),
             (max_acc.array() / max_acc_.array()).maxCoeff());
-        if (max_radio > 1) {
-            t_resolution_ = 1.0 / std::pow(max_radio, 0.24);
-        }
-        else {
-            t_resolution_ = 1.0 / std::pow(max_radio, 0.25);
-        }
+        t_resolution_ = 1.0 / max_radio;
     }
 
     inline Eigen::VectorXd UpdateOutput(double _dt) {
