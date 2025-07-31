@@ -5,7 +5,7 @@ namespace ObvpSolver {
     void Plan_S3_EPVA_FAST(const Eigen::Matrix<double, 3, Eigen::Dynamic>& _start_state,
         const Eigen::Matrix<double, 3, Eigen::Dynamic>& _end_state,
         double& _T,
-        Eigen::Matrix<double, 6, Eigen::Dynamic>& C) {
+        Eigen::Matrix<double, 6, Eigen::Dynamic>& _C) {
         Eigen::VectorXd q0 = _start_state.row(0);
         Eigen::VectorXd v0 = _start_state.row(1);
         Eigen::VectorXd a0 = _start_state.row(2);
@@ -47,14 +47,14 @@ namespace ObvpSolver {
         C_matrix.row(1) = v0;
         C_matrix.row(0) = q0;
 
-        C = C_matrix;
+        _C = C_matrix;
     }
 
     void Plan_S3_EP(const Eigen::Matrix<double, 3, Eigen::Dynamic>& _start_state,
         const Eigen::Matrix<double, 1, Eigen::Dynamic>& _end_state,
         const double _w_t,
         double& _T,
-        Eigen::Matrix<double, 6, Eigen::Dynamic>& C) {
+        Eigen::Matrix<double, 6, Eigen::Dynamic>& _C) {
         Eigen::VectorXd q0 = _start_state.row(0);
         Eigen::VectorXd v0 = _start_state.row(1);
         Eigen::VectorXd a0 = _start_state.row(2);
@@ -110,14 +110,14 @@ namespace ObvpSolver {
         C_matrix.row(1) = v0;
         C_matrix.row(0) = q0;
 
-        C = C_matrix;
+        _C = C_matrix;
     }
 
     void Plan_S3_EPV(const Eigen::Matrix<double, 3, Eigen::Dynamic>& _start_state,
         const Eigen::Matrix<double, 2, Eigen::Dynamic>& _end_state,
         const double _w_t,
         double& _T,
-        Eigen::Matrix<double, 6, Eigen::Dynamic>& C) {
+        Eigen::Matrix<double, 6, Eigen::Dynamic>& _C) {
         Eigen::VectorXd q0 = _start_state.row(0);
         Eigen::VectorXd v0 = _start_state.row(1);
         Eigen::VectorXd a0 = _start_state.row(2);
@@ -155,14 +155,14 @@ namespace ObvpSolver {
         C_matrix.row(1) = v0;
         C_matrix.row(0) = q0;
 
-        C = C_matrix;
+        _C = C_matrix;
     }
 
     void Plan_S3_EPVA(const Eigen::Matrix<double, 3, Eigen::Dynamic>& _start_state,
         const Eigen::Matrix<double, 3, Eigen::Dynamic>& _end_state,
         const double _w_t,
         double& _T,
-        Eigen::Matrix<double, 6, Eigen::Dynamic>& C) {
+        Eigen::Matrix<double, 6, Eigen::Dynamic>& _C) {
         Eigen::VectorXd q0 = _start_state.row(0);
         Eigen::VectorXd v0 = _start_state.row(1);
         Eigen::VectorXd a0 = _start_state.row(2);
@@ -202,7 +202,7 @@ namespace ObvpSolver {
         C_matrix.row(1) = v0;
         C_matrix.row(0) = q0;
 
-        C = C_matrix;
+        _C = C_matrix;
     }
 
 
