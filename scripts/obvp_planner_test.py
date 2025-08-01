@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     dof = 7
     initial_state = np.zeros((3, dof), dtype=np.float64)
-    max_vel = np.array([1.0] * dof, dtype=np.float64)
+    max_vel = np.array([10.0] * dof, dtype=np.float64)
     max_acc = np.array([5.0] * dof, dtype=np.float64)
     weight_T = 1.0
 
@@ -58,13 +58,13 @@ if __name__ == "__main__":
     rate = rospy.Rate(1/dt)
 
     np.random.seed(8329)
-    type = 1
+    type = 3
     tar_state = np.zeros((type, dof))
     i = 0
     pts = 0
     mean_t = 0
     while rospy.is_shutdown() == False:
-        if dt*i >= planner.getT()*0.5:
+        if dt*i >= planner.getT():
             i = 0
             pts += 1
             resolution = planner.getResolution()
