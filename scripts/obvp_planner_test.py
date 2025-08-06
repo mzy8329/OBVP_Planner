@@ -1,8 +1,10 @@
 import numpy as np
-import rospy
-from std_msgs.msg import Float32MultiArray
 import matplotlib.pyplot as plt
 import time
+
+import rospy
+from std_msgs.msg import Float32MultiArray
+
 
 from obvp_planner import ObvpPlanner
 
@@ -54,11 +56,11 @@ if __name__ == "__main__":
 
     t = 0
     dt = 0.001
-    res = 0.01
+    res = 0.5
     rate = rospy.Rate(1/dt)
 
     np.random.seed(8329)
-    type = 3
+    type = 1
     tar_state = np.zeros((type, dof))
     i = 0
     pts = 0
@@ -96,10 +98,10 @@ if __name__ == "__main__":
         cmd_list.append(np.array(tar_state[0, :]))
         
         output_q = output_q.astype(np.float32)
-        msg = Float32MultiArray(data=output_q)
         i += 1
         t += dt
 
+        # msg = Float32MultiArray(data=output_q)
         # state_publisher.publish(msg)
         # rate.sleep()
 

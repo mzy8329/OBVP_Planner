@@ -14,6 +14,7 @@ find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
 
 find_package(Eigen3 REQUIRED)
+find_package(casadi REQUIRED)
 
 find_package(catkin REQUIRED COMPONENTS
     roscpp
@@ -25,6 +26,7 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
     ${EIGEN3_INCLUDE_DIRS}
     ${OMPL_INCLUDE_DIRS}
+    ${CASADI_INCLUDE_DIR}
     include
 )
 

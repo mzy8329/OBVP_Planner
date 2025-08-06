@@ -14,72 +14,70 @@ public:
     };
     ~ObvpPlanner() { ; }
 
-    Eigen::MatrixXd getCurrentState() {
-        return current_state_;
-    }
-
-    double getResolution() {
-        return t_resolution_;
-    }
-
-    double getT() {
-        return T_ / t_resolution_;
-    }
-
     Eigen::VectorXd getCurrentOutput_EP(const Eigen::MatrixXd& _target_state, double _dt) {
-        if (target_state_.rows() != _target_state.rows() || target_state_ != _target_state) {
+        if (_target_state.rows() < 1) {
+            std::cout << "Error: target_state.rows() must be larger than 0" << std::endl;
+            return Eigen::VectorXd::Zero(dof_);
+        }
+
+        if (updata_state_ || target_state_.rows() != _target_state.rows() || target_state_ != _target_state) {
             target_state_.resize(_target_state.rows(), _target_state.cols());
             target_state_ = _target_state;
 
-            if (_target_state.rows() == 1) {
-                ObvpSolver::Plan_S3_EP(current_state_, target_state_, weight_T_, T_, Pos_C_Matrix_);
-                UpdateMatrix();
-            }
-            else {
-                std::cout << "Error: target_state.rows() must be 1" << std::endl;
-                return Eigen::VectorXd::Zero(dof_);
-            }
+            ObvpSolver::Plan_S3_EP(current_state_, target_state_.topRows(1), weight_T_, T_, Pos_C_Matrix_);
+            UpdateMatrix();
+
             t_ = 0;
+            updata_state_ = false;
         }
         return UpdateOutput(_dt);
     }
 
     Eigen::VectorXd getCurrentOutput_EPV(const Eigen::MatrixXd& _target_state, double _dt) {
-        if (target_state_.rows() != _target_state.rows() || target_state_ != _target_state) {
+        if (_target_state.rows() < 2) {
+            std::cout << "Error: target_state.rows() must be larger than 1" << std::endl;
+            return Eigen::VectorXd::Zero(dof_);
+        }
+
+        if (updata_state_ || target_state_.rows() != _target_state.rows() || target_state_ != _target_state) {
             target_state_.resize(_target_state.rows(), _target_state.cols());
             target_state_ = _target_state;
 
-            if (_target_state.rows() == 2) {
-                ObvpSolver::Plan_S3_EPV(current_state_, target_state_, weight_T_, T_, Pos_C_Matrix_);
-                UpdateMatrix();
-            }
-            else {
-                std::cout << "Error: target_state.rows() must be 2" << std::endl;
-                return Eigen::VectorXd::Zero(dof_);
-            }
+            ObvpSolver::Plan_S3_EPV(current_state_, target_state_.topRows(2), weight_T_, T_, Pos_C_Matrix_);
+            UpdateMatrix();
+
             t_ = 0;
+            updata_state_ = false;
         }
         return UpdateOutput(_dt);
     }
 
     Eigen::VectorXd getCurrentOutput_EPVA(const Eigen::MatrixXd& _target_state, double _dt) {
-        if (target_state_.rows() != _target_state.rows() || target_state_ != _target_state) {
+        if (_target_state.rows() < 3) {
+            std::cout << "Error: target_state.rows() must be larger than 2" << std::endl;
+            return Eigen::VectorXd::Zero(dof_);
+        }
+
+        if (updata_state_ || target_state_.rows() != _target_state.rows() || target_state_ != _target_state) {
             target_state_.resize(_target_state.rows(), _target_state.cols());
             target_state_ = _target_state;
 
-            if (_target_state.rows() == 3) {
-                ObvpSolver::Plan_S3_EPVA(current_state_, target_state_, weight_T_, T_, Pos_C_Matrix_);
-                UpdateMatrix();
-            }
-            else {
-                std::cout << "Error: target_state.rows() must be 3" << std::endl;
-                return Eigen::VectorXd::Zero(dof_);
-            }
+            ObvpSolver::Plan_S3_EPVA(current_state_, target_state_.topRows(3), weight_T_, T_, Pos_C_Matrix_);
+            UpdateMatrix();
+
             t_ = 0;
+            updata_state_ = false;
         }
         return UpdateOutput(_dt);
     }
 
+    Eigen::MatrixXd getCurrentState() { return current_state_; }
+    double getResolution() { return t_resolution_; }
+    double getT() { return T_ / t_resolution_; }
+    void setCurrentState(const Eigen::MatrixXd& _current_state) {
+        current_state_ = _current_state;
+        updata_state_ = true;
+    }
 
 private:
     inline Eigen::RowVectorXd t2vec(double _t) {
@@ -97,10 +95,9 @@ private:
             Acc_C_Matrix_.row(i - 2) = Pos_C_Matrix_.row(i) * i * (i - 1);
         }
 
-
         Eigen::VectorXd max_vel = Eigen::VectorXd::Zero(dof_);
         Eigen::VectorXd max_acc = Eigen::VectorXd::Zero(dof_);
-        for (double t = 0; t < T_; t += 0.1) {
+        for (double t = 0; t < T_; t += 0.02) {
             Eigen::RowVectorXd t_vec = t2vec(t);
             max_vel = max_vel.cwiseMax((t_vec * Vel_C_Matrix_).transpose().cwiseAbs());
             max_acc = max_acc.cwiseMax((t_vec * Acc_C_Matrix_).transpose().cwiseAbs());
@@ -140,5 +137,7 @@ private:
     Eigen::MatrixXd current_state_;
     double t_ = 0;
     double t_resolution_ = 1.0;
+
+    bool updata_state_ = false;
 
 };
